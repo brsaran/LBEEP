@@ -1,5 +1,8 @@
-#Author: Saravanan Vijayakumar (brsaran@gmail.com)
-#Date:	18-05-2015
+###################################################################################
+# Author: Saravanan Vijayakumar (brsaran@gmail.com)                               #
+# Affiliation: CAS in Crystallography and Biophysics, University of Madras, India #
+# Date:	18-05-2015								  #
+###################################################################################
 
 package      brsaran::DDE;
 require      Exporter;
@@ -97,7 +100,7 @@ sub generate_random_string
         }
         return $random_string;
 }
-sub Epi_Predict_pep{
+sub Epi_Predict_pep{ #Routine for making prediciton using model generated in WEKA
 	my ($Arff_file) = $_[0];
 	my ($path) = $_[1];
 	my ($Model_sel) = $_[2];
