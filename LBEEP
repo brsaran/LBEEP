@@ -1,10 +1,9 @@
+#!/usr/bin/perl
 ###################################################################################
 # Author: Saravanan Vijayakumar (brsaran@gmail.com)                               #
 # Affiliation: CAS in Crystallography and Biophysics, University of Madras, India #
 # Date:	18-05-2015								  #
 ###################################################################################
-
-#!/usr/bin/perl
 use strict;
 use Cwd qw(abs_path);
 use lib abs_path().'/dependency/module/'; #setting module dependnecy path ! Do not change unless you are sure !
