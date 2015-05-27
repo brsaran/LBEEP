@@ -39,7 +39,7 @@ Linear B-Cell Exact Epitope Predictor
 5. Limitations
    ============
    
-   (a) Since the model is trained using epitopes and non-epitopes of length >5 and <=15, prediction made for other length peptides will be undesirable. Hence, it is advised not to mention window size less than 6 and > 15 in protein mode.
+   (a) Since the model is trained using epitopes and non-epitopes of length >5 and <=15, prediction made for peptides other than these length will be undesirable. Hence, it is advised not to mention window size less than 6 and > 15 in protein mode.
 
 6. Example
    =======
