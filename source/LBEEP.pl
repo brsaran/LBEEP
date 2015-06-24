@@ -1,9 +1,13 @@
 #!/usr/bin/perl
+###################################################################################
+# Author: Saravanan Vijayakumar (brsaran@gmail.com)                               #
+# Affiliation: CAS in Crystallography and Biophysics, University of Madras, India #
+# Date:	18-05-2015								  #
+###################################################################################
 use strict;
 use Cwd qw(abs_path);
-use lib abs_path().'/dependency/module/';
-use brsaran::DDE; 
-
+use lib abs_path().'/dependency/module/'; #setting module dependnecy path ! Do not change unless you are sure !
+use brsaran::DDE; #requires DDE module developed in this study
 
 ##########################
 
@@ -11,7 +15,7 @@ my $path2WEKA = abs_path().'/dependency/'; #change only if weka.jar is in some o
 
 #########################
 
-#######   DO not change anyhting beyond this line ###############
+#######   DO not change anyhting beyond this line, unless if you are sure ###############
 
 ###Argument Check~~~~~~~~~~~~
 my ($i, $mode, $inFile, $outFile,$Thresh,$MODEL);
@@ -35,7 +39,7 @@ for($i=0;$i<@ARGV;$i++){
 	if($ARGV[$i] eq "-M"){
 		$MODEL = $ARGV[$i+1];
 		$MODEL=~s/\s//g;
-		if(($MODEL ne 'B') && ($MODEL ne 'O')){ print "-M $MODEL invalid option! use 'B' or 'O' Exiting !\n"; exit;}
+		if(($MODEL ne 'B') && ($MODEL ne 'O')&&($MODEL ne 'C')){ print "-M $MODEL invalid option! use 'B' or 'O' or 'C' Exiting !\n"; exit;}
 	}
 	if($ARGV[$i] eq "-t"){
 		$Thresh = $ARGV[$i+1];
@@ -53,11 +57,12 @@ if($Thresh eq ''){print "-t: Threshold set to 0.6\n"; $Thresh = 0.6;}
 
 
 ##################### PEPTIDE MODE BEGINS #####################################
-my (@FHead,@PEP,@PRO,@Result,$Pep_DDE,$j,$line1,$line2,$temp,$Arff_header,$Pro_Out,$Pep_Out,$FinalOutPep);
-$FinalOutPep = 'Sno,ID|Peptide|,Score'."\n";
-$j=0;
 
-if($mode eq "pep"){
+my (@FHead,@PEP,@PRO,@Result,$Pep_DDE,$j,$line1,$line2,$temp,$Arff_header,$Pro_Out,$Pep_Out,$FinalOutPep); #Variable decclaration
+$FinalOutPep = 'Sno,ID|Peptide|,Score'."\n"; #Header for CSV
+$j=0; #Variable for counting the peptides
+
+if($mode eq "pep"){ #If peptide mode is opted
 	$FinalOutPep = 'Sno,ID|Peptide|,Score'."\n";
 	print "\nProcessing Input...........";
 	while(($line1 = <INFILE>) && ($line2 = <INFILE>)){
@@ -83,8 +88,8 @@ if($mode eq "pep"){
 	$Pep_DDE=""; #Release memory	
 	print "Prediction.................";
 	$Pep_Out = Epi_Predict_pep($temp,$path2WEKA,$MODEL);	#Make prediction
-	$Pep_Out=~s/^(?:.*\n){1,5}//; #Remove line 1-5
-	$Pep_Out=~s/(?:.*\n){1,1}\z//; #Remove last line
+	$Pep_Out=~s/^(?:.*\n){1,5}//; #Remove line 1-5 of weka out
+	$Pep_Out=~s/(?:.*\n){1,1}\z//; #Remove last line of weka out
 	`rm $temp`; #remove ARFF file
 	print "Done\n";
 	
@@ -108,11 +113,12 @@ if($mode eq "pep"){
 ######		PEPTIDE MODE ENDS ###########################
 
 ############################# Protein Mode Begins ##########################
-$j=0;
-my ($PFhead, $protein,@Position);
+$j=0; #Reinitializing $j
 
-if($mode eq "pro"){
-	$FinalOutPep = 'Position,|Peptide|,Score'."\n";
+my ($PFhead, $protein,@Position); #Variable Decclaration for protein mode
+
+if($mode eq "pro"){# If protein mode is opted
+	$FinalOutPep = 'Position,|Peptide|,Score'."\n"; #Header for CSV
 	print "\nEnter the Window size to be scanned (6-15):";
 	my $Window = <STDIN>;
 	chop($Window);
@@ -127,7 +133,7 @@ if($mode eq "pro"){
 		print "\nWindow size not between 6 and 15 ! May obtain undesired result !\n"; 
 	}
 	close (INFILE);
-	######## Split the protein into mentioned window size and ARFF #################
+	######## Split the protein into mentioned window size and generating inputs #################
 	print "\nSplitting the Sequence into the mentioned Window Size........";
 	my $Length_Protein = length($protein);
 	for($j=0;$j<($Length_Protein - ($Window-1));$j++){
@@ -146,7 +152,7 @@ if($mode eq "pro"){
 	$Pep_DDE = "";
 	print "Done\n";
 	print "Prediction............";
-	$Pro_Out = Epi_Predict_pep($temp,$path2WEKA,$MODEL);	#Make prediction	
+	$Pro_Out = Epi_Predict_pep($temp,$path2WEKA,$MODEL);#Make prediction	
 	$Pro_Out=~s/^(?:.*\n){1,5}//; #Remove line 1-5
 	$Pro_Out=~s/(?:.*\n){1,1}\z//; #Remove last line
 	`rm $temp`; #remove ARFF file
@@ -177,7 +183,7 @@ if($mode eq "pro"){
 	chop($Ht);
 	while (uc $Ht eq 'Y'){
 		print "Generating HTML Output......................";
-		my $HTML_head = '<!DOCTYPE html><html><body><body bgcolor="#E6E6FA"><H1><center>L-BEEP V1.0</H1><br><H2> <center>Results for the Input Protein: <font color = "blue">'. substr($PFhead,1,10).'</font></H2><br><br>'."<H4><font color = 'red'>Parameters: -i: $inFile\; -m: $mode\; -M: $MODEL\; -t: $Thresh\; Window_size: $Window</font></h4>".'<hr><br><pre>';
+		my $HTML_head = '<!DOCTYPE html><html><body><body bgcolor="#E6E6FA"><H1><center>LBEEP V1.0</H1><p><H4><center><font color = "green">CAS in Crystallography and Biophysics,<br>University of Madras, Chennai - 600025. Tamilnadu, India.</center></font><br><H2> <center>Results for the Input Protein: <font color = "blue">'. substr($PFhead,1,10).'</font></H2><br><br>'."<H4><font color = 'red'>Parameters: -i: $inFile\; -m: $mode\; -M: $MODEL\; -t: $Thresh\; Window_size: $Window</font></h4>".'<hr><br><pre>';
 		for($j=0;$j<@Result;$j++){
 			if($Result[$j]>= $Thresh){
 				$EE[$j] = '<a href=" " title="'. $Position[$j].'|'.$PRO[$j].'|'. $Result[$j].'" style="background-color:#FFFFFF;color:#000000;text-decoration:none"><font color="green">E</font></a>';	
@@ -186,7 +192,6 @@ if($mode eq "pro"){
 			}
 		}
 		$Ht=""; #Criteria to exit while
-		
 		################## Splitting 50 ##########
 		my (@split_50, $i50);
 		$i50 = (length($protein)/50);
@@ -224,8 +229,7 @@ if($mode eq "pro"){
 		print "Done\n";
 		#################### Splitting 50 ends###########
 		#print "$HTML_head @EE";
-	}
+	} #While exit
 	############## HTML Output ENDS #################################
 }
 ################## Protein Mode Ends ########################
-
