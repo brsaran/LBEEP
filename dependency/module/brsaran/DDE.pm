@@ -43,7 +43,8 @@ sub DDE{		#Computes the Dipeptide Deviation from Mean
 		 }else{
 		     $i=0; 	
 		 }
-	     $pX[$j] = $i/$Length_Prt;	     	#Measure Calculation : px = nx/N
+	     if($Length_Prt <5){print "\nLength of peptide less than 6 is not acceptable ! Exiting !\n";exit;}
+	     $pX[$j] = $i/$Length_Prt;	     	#Measure Calculation : px = nx/N	
 	     $j++;
 	     $i=0;
     }
@@ -105,7 +106,7 @@ sub Epi_Predict_pep{ #Routine for making prediciton using model generated in WEK
 	my ($path) = $_[1];
 	my ($Model_sel) = $_[2];
 	my $mod_path;
-	if($Model_sel eq 'O'){ $mod_path = './model/ORIGINAL.model';}else{$mod_path = './model/BALANCED.model';}
+	if($Model_sel eq 'O'){ $mod_path = './model/ORIGINAL.model';}elsif($Model_sel eq 'C'){$mod_path = './model/CONFIRM.model';}else{$mod_path = './model/BALANCED.model';}
 	my $t;
 	$t = `java -cp $path./weka.jar weka.classifiers.meta.AdaBoostM1 -T $Arff_file -l $mod_path -p 0`;
 	return $t;

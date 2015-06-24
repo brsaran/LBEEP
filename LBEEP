@@ -39,7 +39,7 @@ for($i=0;$i<@ARGV;$i++){
 	if($ARGV[$i] eq "-M"){
 		$MODEL = $ARGV[$i+1];
 		$MODEL=~s/\s//g;
-		if(($MODEL ne 'B') && ($MODEL ne 'O')){ print "-M $MODEL invalid option! use 'B' or 'O' Exiting !\n"; exit;}
+		if(($MODEL ne 'B') && ($MODEL ne 'O')&&($MODEL ne 'C')){ print "-M $MODEL invalid option! use 'B' or 'O' or 'C' Exiting !\n"; exit;}
 	}
 	if($ARGV[$i] eq "-t"){
 		$Thresh = $ARGV[$i+1];
