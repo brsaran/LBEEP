@@ -4,7 +4,7 @@ Linear B-Cell Exact Epitope Predictor
 1. Introduction
    =============
    LBEEP (Linear B-Cell Exact Epitope Predictor) is a perl based open source tool for the prediction of Linear B-cell epitopes.
-   Please refer the article tilted "A Novel Dipeptide-based Feature Descriptor for Exact Linear B-cell Epitope Prediction" for more deatils.
+   Please refer the article tilted "Harnessing Computational Biology for Exact Linear B-Cell Epitope Prediction: A Novel Amino Acid Composition-based Feature Descriptor" for more deatils.
 
 2. Installation
    ============
