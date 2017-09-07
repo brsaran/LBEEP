@@ -52,3 +52,5 @@ Linear B-Cell Exact Epitope Predictor
    =======
    LBEEP V1.0 is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation version 3.0 of the License.
    This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License contained in the file LICENSE for more details.
+   
+5. Contact: For queries brsaran@gmail.com; saravanan.vij@icmr.gov.in;
