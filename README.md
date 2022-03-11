@@ -19,6 +19,12 @@ Linear B-Cell Exact Epitope Predictor
    Windows and other operating system
    (a) The source code has been writtern in PERL and hence it can be executed as perl script in other operating system. Note: The program is not tested in any other operating system (except Linux based OS) and hence not advised to execute in other OS.
 
+   **Using Docker**
+   1. Build the container ```docker build -t lbeep .```
+   2. To test the container is working: ```docker run -it lbeep -i test_input_peptides -m pep```
+     * This will work from an input file that exists INSIDE the container and write the output file there as well.
+   3. To run with input and output files on the host system, you will need to provide at least one bind mount, e.g.: ```docker run -v `pwd`:/io -it lbeep -i /io/path_to_input -m pep -o /io/path_to_output_file```.  Note that the paths beginning with '/io', will be from the perspective of the container, not the host.
+
 3. Command line options
    ====================
    
