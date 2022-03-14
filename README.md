@@ -19,6 +19,7 @@ Linear B-Cell Exact Epitope Predictor
    Windows and other operating system
    (a) The source code has been writtern in PERL and hence it can be executed as perl script in other operating system. Note: The program is not tested in any other operating system (except Linux based OS) and hence not advised to execute in other OS.
 
+   Installation notes for "Docker" can be found <a href="https://github.com/IEDB/LBEEP">here</a>
 3. Command line options
    ====================
    
