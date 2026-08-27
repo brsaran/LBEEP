@@ -18,7 +18,9 @@ my $path2WEKA = abs_path().'/dependency/'; #change only if weka.jar is in some o
 #######   DO not change anyhting beyond this line, unless if you are sure ###############
 
 ###Argument Check~~~~~~~~~~~~
-my ($i, $mode, $inFile, $outFile,$Thresh,$MODEL);
+my ($i, $mode, $inFile, $outFile,$Thresh,$MODEL,$Window,$htmlOut);
+$Window = 10; #default window size for protein mode
+$htmlOut = 0; #default: no HTML output
 for($i=0;$i<@ARGV;$i++){
 	if($ARGV[$i] eq "-m"){
 		$mode = $ARGV[$i+1];
@@ -45,6 +47,14 @@ for($i=0;$i<@ARGV;$i++){
 		$Thresh = $ARGV[$i+1];
 		$Thresh=~s/\s//g;
 		if(($Thresh!~m/\d\.\d+/g)){ print "-t:($Thresh) should be greater than 0 and less than 1! Exiting !\n"; exit;}
+	}
+	if($ARGV[$i] eq "-w"){
+		$Window = $ARGV[$i+1];
+		$Window=~s/\s//g;
+		if($Window < 6 || $Window > 15){ print "-w:($Window) window size must be between 6 and 15! Exiting !\n"; exit;}
+	}
+	if($ARGV[$i] eq "-H"){
+		$htmlOut = 1;
 	}
 }
 if($inFile eq ''){print "-i: cannot be null; Input file missing ! Exiting !\n"; `rm $outFile`; exit;}
@@ -119,19 +129,12 @@ my ($PFhead, $protein,@Position); #Variable Decclaration for protein mode
 
 if($mode eq "pro"){# If protein mode is opted
 	$FinalOutPep = 'Position,|Peptide|,Score'."\n"; #Header for CSV
-	print "\nEnter the Window size to be scanned (6-15):";
-	my $Window = <STDIN>;
-	chop($Window);
 		$line1 = <INFILE>;
 		$line2 = <INFILE>;
 		$line1=~s/\s//g;
 		$line2=~s/\s//g;				
 		$PFhead = $line1; #Store Header
 		$protein=$line2; #Store Protein
-				
-	if(($Window < 6) && ($Window >15)){
-		print "\nWindow size not between 6 and 15 ! May obtain undesired result !\n"; 
-	}
 	close (INFILE);
 	######## Split the protein into mentioned window size and generating inputs #################
 	print "\nSplitting the Sequence into the mentioned Window Size........";
@@ -178,10 +181,7 @@ if($mode eq "pro"){# If protein mode is opted
 	
 	########### Generating HTML outputs ##############################
 	my (@EE);
-	print "Want to generate HTML output? (y/n):";
-	my $Ht = <STDIN>;
-	chop($Ht);
-	while (uc $Ht eq 'Y'){
+	if($htmlOut){
 		print "Generating HTML Output......................";
 		my $HTML_head = '<!DOCTYPE html><html><body><body bgcolor="#E6E6FA"><H1><center>LBEEP V1.0</H1><p><H4><center><font color = "green">CAS in Crystallography and Biophysics,<br>University of Madras, Chennai - 600025. Tamilnadu, India.</center></font><br><H2> <center>Results for the Input Protein: <font color = "blue">'. substr($PFhead,1,10).'</font></H2><br><br>'."<H4><font color = 'red'>Parameters: -i: $inFile\; -m: $mode\; -M: $MODEL\; -t: $Thresh\; Window_size: $Window</font></h4>".'<hr><br><pre>';
 		for($j=0;$j<@Result;$j++){
@@ -191,7 +191,6 @@ if($mode eq "pro"){# If protein mode is opted
 				$EE[$j] = '<a href=" " title="'. $Position[$j].'|'.$PRO[$j].'|'. $Result[$j].'" style="background-color:#FFFFFF;color:#000000;text-decoration:none"><font color="red">.</font></a>';	
 			}
 		}
-		$Ht=""; #Criteria to exit while
 		################## Splitting 50 ##########
 		my (@split_50, $i50);
 		$i50 = (length($protein)/50);
@@ -228,8 +227,7 @@ if($mode eq "pro"){# If protein mode is opted
 		close(OUTFILE);
 		print "Done\n";
 		#################### Splitting 50 ends###########
-		#print "$HTML_head @EE";
-	} #While exit
+	} #if htmlOut
 	############## HTML Output ENDS #################################
 }
 ################## Protein Mode Ends ########################

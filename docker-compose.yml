@@ -1,0 +1,39 @@
+services:
+  lbpeak-pep:
+    build: .
+    image: lbpeak:latest
+    volumes:
+      - ./input:/app/input
+      - ./output:/app/output
+    command:
+      - "-i"
+      - "/app/input/input.fa"
+      - "-m"
+      - "pep"
+      - "-o"
+      - "/app/output/results.csv"
+      - "-M"
+      - "B"
+      - "-t"
+      - "0.6"
+
+  lbpeak-pro:
+    build: .
+    image: lbpeak:latest
+    volumes:
+      - ./input:/app/input
+      - ./output:/app/output
+    command:
+      - "-i"
+      - "/app/input/protein.fa"
+      - "-m"
+      - "pro"
+      - "-o"
+      - "/app/output/results.csv"
+      - "-M"
+      - "B"
+      - "-t"
+      - "0.6"
+      - "-w"
+      - "10"
+      - "-H"
